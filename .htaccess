@@ -1,0 +1,6 @@
+php_value date.timezone "America/Sao_Paulo"
+SetEnv TZ America/Sao_Paulo
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*) index.php?pg=$1&a=$2&b=$2
