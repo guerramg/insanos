@@ -1,9 +1,15 @@
 <?php
-        $divisoes = new Divisoes;
+        $user = new Usuarios;
+
 
     if($_POST['botao'] == 'incluir'){
-        $arrayDivisao = array($_POST["divisao"]);
-        $divisoes -> inserir($arrayDivisao);
+        $acesso = $_POST['acesso'];
+        $divisao = $_POST['divisao'];
+        $path = $_POST['path'];
+        $email = $_POST['email'];
+        $grau  = $_POST['grau'];
+
+        $user -> inserir('0','ipatinga','guerra','a@a.com','2');
     }
 
 ?>
@@ -22,60 +28,32 @@
             </div>
             <div class="modal-body">
                 <div class="card">
-                    <div class="card-header">Nova Divisão</div>
+                    <div class="card-header">Novo Usuário</div>
                     <div class="card-body">
                         <hr>
                         <form enctype="application/x-www-form-urlencoded" action="" method="post">
+
                             <div class="form-group">
                                 <label for="divisao" class="control-label mb-1">Divisão</label>
-                                <input id="divisao" name="divisao" type="text" class="form-control" aria-required="true"
+                                <select name="divisao" id="">
+                                    <option></option>
+                                    <?php
+                                    $user->listaSelect();
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="grau" class="control-label mb-1">Grau</label>
+                                <input id="grau" name="grau" type="text" class="form-control" aria-required="true"
                                     aria-invalid="false" required>
                             </div>
-                            <div>
+
+                    <div>
+
                                 <button id="add-button" type="submit" class="btn btn-lg btn-info btn-block" name="botao"
                                     value="incluir">
                                     <i class="fa fa-plus-square"></i>&nbsp; Incluir
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- FIM FORM -->
-
-<!-- FORM EDITAR MODAL -->
-
-<div class="modal fade" id="formEditarDivisao" tabindex="-1" role="dialog" aria-labelledby="formEditarDivisaoTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">Editar Divisão</div>
-                    <div class="card-body">
-                        <hr>
-                        <form enctype="application/x-www-form-urlencoded" action="" method="post">
-                            <div class="form-group">
-                                <label for="divisao" class="control-label mb-1">Divisão</label>
-                                <input id="divisao" name="divisao" type="text" class="form-control" aria-required="true"
-                                    aria-invalid="false" required>
-                            </div>
-                            <div>
-                                <button id="add-button" type="submit" class="btn btn-lg btn-info btn-block" name="botao"
-                                    value="incluir">
-                                    <i class="fa fa-plus-square"></i>&nbsp; Editar
                                 </button>
                             </div>
                         </form>
@@ -112,7 +90,7 @@
                         <button class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal"
                             data-target="#formDivisao">
                             <i class="zmdi zmdi-plus"></i>
-                            Incluir divisão
+                            Incluir usuário
                         </button>
 
 
@@ -133,8 +111,8 @@
                         <tbody>
 
                             <?php
-                
-                                $divisoes -> listaDivisoes();
+
+                                //$user -> listaSelect();
 
                             ?>
 
