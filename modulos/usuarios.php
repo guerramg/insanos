@@ -1,5 +1,7 @@
 <?php
-        $user = new Usuarios;
+        //$conversorData = new conversorDatas;
+        $usuarios = new Usuarios;
+        $divisoes = new Divisoes;
 
 
     if($_POST['botao'] == 'incluir'){
@@ -9,7 +11,7 @@
         $email = $_POST['email'];
         $grau  = $_POST['grau'];
 
-        $user -> inserir('0','ipatinga','guerra','a@a.com','2');
+        $usuarios -> inserir($acesso, $divisao, $path , $email, $grau);
     }
 
 ?>
@@ -35,18 +37,46 @@
 
                             <div class="form-group">
                                 <label for="divisao" class="control-label mb-1">Divisão</label>
-                                <select name="divisao" id="">
+                                <select name="divisao" id="" class="form-control" required>
                                     <option></option>
                                     <?php
-                                    $user->listaSelect();
+                                    $divisoes -> selectDivisoes();
                                     ?>
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="grau" class="control-label mb-1">Grau</label>
-                                <input id="grau" name="grau" type="text" class="form-control" aria-required="true"
-                                    aria-invalid="false" required>
+                                <select name="grau" class="form-control" id="grau" required>
+                                    <option></option>
+                                    <option value="0">Diretor</option>
+                                    <option value="1">Sub Diretor</option>
+                                    <option value="2">Social</option>
+                                    <option value="3">ADM</option>
+                                    <option value="10">Sargento</option>
+                                    <option value="11">Full</option>
+                                    <option value="12">Meio</option>
+                                    <option value="13">PP</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="acesso" class="control-label mb-1">Acesso</label>
+                                <select name="acesso" class="form-control" id="acesso" required>
+                                    <option></option>
+                                    <option value="0">Administrador</option>
+                                    <option value="1">Social</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="path" class="control-label mb-1">Patch</label>
+                                <input id="path" name="path" type="text" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="control-label mb-1">Email</label>
+                                <input id="email" name="email" type="email" class="form-control" required>
                             </div>
 
                     <div>
@@ -75,7 +105,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 mb-5">
-                <h3 class="title-5 m-b-35">DIVISÕES</h3>
+                <h3 class="title-5 m-b-35">USUÁRIOS</h3>
                 <div class="table-data__tool">
                     <div class="table-data__tool-left">
 
@@ -103,8 +133,9 @@
                                 <th>data</th>
                                 <th>status</th>
                                 <th>divisão</th>
-                                <th>responsável Social</th>
-                                <th>total de integrantes</th>
+                                <th>patch</th>
+                                <th>email</th>
+                                <th>grau</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -112,7 +143,7 @@
 
                             <?php
 
-                                //$user -> listaSelect();
+                                $usuarios -> listaUsuarios();
 
                             ?>
 
@@ -125,10 +156,3 @@
 
 </section>
 <!-- END DIVISOES-->
-
-<script>
-    function edicao(valor){
-    //let valueEditar = document.querySelector('#botaoEditar')
-    console.log(valor)
-    }
-</script>

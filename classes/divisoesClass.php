@@ -26,6 +26,8 @@ class Divisoes
         }
     }
 
+    //LISTA DAS DIVISOES
+    
     public function listaDivisoes()
     {
         include 'conexao.php';
@@ -83,6 +85,38 @@ class Divisoes
             print 'erro '.$erro->getMessage();
         }
     }
+
+    //SELECT DAS DIVISOES
+
+    public function selectDivisoes()
+   
+    {
+         require_once 'conexao.php';
+ 
+         $query = $conector->prepare("SELECT * FROM divisoes WHERE status != '1' ORDER BY divisao ASC");
+ 
+         try{
+             $query->execute();
+ 
+             while($dados = $query->fetch(PDO::FETCH_OBJ))
+             
+             {
+ 
+                 print_r('
+                         <option value="'.$dados->id.'">
+ 
+                         '.$dados->divisao.'
+ 
+                         </option>
+                     ');
+             }
+         }
+         catch(PDOException $erro)
+         {
+         print 'erro '.$erro->getMessage();
+         }
+     }
+ 
 } 
 
 ?>
