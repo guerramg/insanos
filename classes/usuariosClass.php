@@ -96,7 +96,7 @@ class Usuarios extends conversorDatas{
                 print_r('
                                         <tr class="tr-shadow">
 
-                                            <td></td>
+                                            <td>'.conversorDatas::dataBrasil($dados -> data).'</td>
 
                                             <td>
                                                 <span class="'.$classe.'">'.$status.'</span>

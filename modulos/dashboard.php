@@ -1,4 +1,96 @@
-            <!-- STATISTIC-->
+          <!-- MODAL ACOES -->
+          <div class="modal fade" id="formAcoes" tabindex="-1" role="dialog" aria-labelledby="formAcoesTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">Cadastrar Nova Ação Social</div>
+                    <div class="card-body">
+                        <hr>
+                        <form enctype="application/x-www-form-urlencoded" action="" method="post">
+
+                        <div class="form-group">
+                                <label for="path" class="control-label mb-1">Realizada</label>
+                                <input id="realizada" name="data" type="date" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="path" class="control-label mb-1">Ação</label>
+                                <textarea name="acao" id="acao" cols="30" rows="5" class="form-control" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="divisao" class="control-label mb-1">Divisão</label>
+                                <select name="divisao" id="" class="form-control" required>
+                                    <option></option>
+                                    <?php
+                                    Divisoes::selectDivisoes();
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="grau" class="control-label mb-1">Grau</label>
+                                <select name="grau" class="form-control" id="grau" required>
+                                    <option></option>
+                                    <option value="0">Diretor</option>
+                                    <option value="1">Sub Diretor</option>
+                                    <option value="2">Social</option>
+                                    <option value="3">ADM</option>
+                                    <option value="10">Sargento</option>
+                                    <option value="11">Full</option>
+                                    <option value="12">Meio</option>
+                                    <option value="13">PP</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="acesso" class="control-label mb-1">Acesso</label>
+                                <select name="acesso" class="form-control" id="acesso" required>
+                                    <option></option>
+                                    <option value="0">Administrador</option>
+                                    <option value="1">Social</option>
+                                    <option value="2">Integrante</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="path" class="control-label mb-1">Patch</label>
+                                <input id="path" name="path" type="text" class="form-control" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="control-label mb-1">Email</label>
+                                <input id="email" name="email" type="email" class="form-control" required>
+                            </div>
+
+                    <div>
+
+                                <button id="add-button" type="submit" class="btn btn-lg btn-info btn-block" name="botao"
+                                    value="incluir">
+                                    <i class="fa fa-plus-square"></i>&nbsp; Incluir
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+          <!-- FIM MODAL ACOES -->
+          
+          <!-- STATISTIC-->
             <section class="statistic statistic2">
                 <div class="container">
                     <div class="row">
@@ -146,7 +238,8 @@
 
                                 </div>
                                 <div class="table-data__tool-right">
-                                    <button class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                    <button class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal"
+                            data-target="#formAcoes">
                                         <i class="zmdi zmdi-plus"></i>Incluir Ação</button>
                                     <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
                                         <select class="js-select2" name="type">

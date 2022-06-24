@@ -6,6 +6,15 @@
         $divisoes -> inserir($arrayDivisao);
     }
 
+    if($_POST['botao'] == 'editar'){
+        $divisoes -> editar($_POST["id"], $_POST["status"], $_POST["divisao"]);
+    }
+
+    if($_POST['botao'] == 'excluir'){
+        $divisoes -> excluir($_POST["idDivisao"]);
+    }
+
+
 ?>
 
 
@@ -41,9 +50,6 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
         </div>
     </div>
 </div>
@@ -65,16 +71,25 @@
                 <div class="card">
                     <div class="card-header">Editar Divisão</div>
                     <div class="card-body">
+                    <form enctype="application/x-www-form-urlencoded" action="" method="post">
+
+                        <div id="statusDados">
+                    Ativo <input type="radio" name="status" id="statusEdicao" value="0" class="mr-2">
+                    Inativo <input type="radio" name="status" id="statusEdicao" value="1">
+</div>
                         <hr>
-                        <form enctype="application/x-www-form-urlencoded" action="" method="post">
                             <div class="form-group">
+
+
                                 <label for="divisao" class="control-label mb-1">Divisão</label>
-                                <input id="divisao" name="divisao" type="text" class="form-control" aria-required="true"
-                                    aria-invalid="false" required>
+                                <input id="divisaoEdicao" name="divisao" type="text" class="form-control" aria-required="true"
+                                    aria-invalid="false">
+                            
+                                    <input type="hidden" name="id" id="idEdicao">
                             </div>
                             <div>
                                 <button id="add-button" type="submit" class="btn btn-lg btn-info btn-block" name="botao"
-                                    value="incluir">
+                                    value="editar">
                                     <i class="fa fa-plus-square"></i>&nbsp; Editar
                                 </button>
                             </div>
@@ -82,15 +97,49 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
         </div>
     </div>
 </div>
 
 <!-- FIM FORM -->
 
+<!-- FORM EXCLUIR MODAL -->
+
+<div class="modal fade" id="formExcluirDivisao" tabindex="-1" role="dialog" aria-labelledby="formExcluirDivisaoTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">Tem certeza que deseja excluir?</div>
+                    <div class="card-body">
+                        <hr>
+                        <form enctype="application/x-www-form-urlencoded" action="" method="post">
+                            <div class="form-group">
+                                <input id="idExcluirDivisao" name="idDivisao" type="text" class="form-control" aria-required="true"
+                                    aria-invalid="false" hidden>
+                                    <h1 id="nomeExcluirDivisao" class="text-center text-uppercase text-danger"></h1>
+                            </div>
+                            <div>
+                                <button id="add-button" type="submit" class="btn btn-lg btn-danger btn-block" name="botao"
+                                    value="excluir">
+                                    <i class="fas fa-exclamation-triangle"></i>&nbsp; Excluir
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FIM FORM -->
 
 <!-- DIVISOES-->
 <section class="p-t-20">
@@ -149,8 +198,39 @@
 <!-- END DIVISOES-->
 
 <script>
+    //EDIÇÃO
+
     function edicao(valor){
-    //let valueEditar = document.querySelector('#botaoEditar')
-    console.log(valor)
+        let dadosBanco = valor.split('-')
+
+        let id = document.querySelector('#idEdicao')
+        let status = document.querySelector('#statusEdicao')
+        let divisao = document.querySelector('#divisaoEdicao')
+        let pai = document.querySelector('#statusDados')
+
+
+        id.value = dadosBanco[1]
+
+       if(dadosBanco[0] == 0){
+        pai.innerHTML = 'Ativo <input type="radio" name="status" id="statusEdicao" value="0" class="mr-2" checked>Inativo <input type="radio" name="status" id="statusEdicao" value="1">'
+        }
+        else{
+        pai.innerHTML = 'Ativo <input type="radio" name="status" id="statusEdicao" value="0" class="mr-2">Inativo <input type="radio" name="status" id="statusEdicao" value="1" checked>'
+        }
+
+        divisao.value = dadosBanco[2]
+
     }
+
+    //EXCLUIR
+        function exclusao(valor){
+            let dadosBanco = valor.split('-')
+
+            let divisaoid = document.querySelector('#idExcluirDivisao')
+            let divisaoNome = document.querySelector('#nomeExcluirDivisao')
+
+            divisaoid.value = dadosBanco[0]
+            divisaoNome.textContent = dadosBanco[1]
+
+        }
 </script>

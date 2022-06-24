@@ -66,6 +66,7 @@
                                     <option></option>
                                     <option value="0">Administrador</option>
                                     <option value="1">Social</option>
+                                    <option value="2">Integrante</option>
                                 </select>
                             </div>
 

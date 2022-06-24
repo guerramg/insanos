@@ -2,6 +2,7 @@
 
 class Divisoes
 {
+//INSERIR DIVISAO
     public function inserir($arrayDivisao)
     {
         include 'conexao.php';
@@ -26,8 +27,67 @@ class Divisoes
         }
     }
 
-    //LISTA DAS DIVISOES
-    
+//EDITA DIVISOES
+    public function editar($id, $status, $divisao)
+    {
+        include 'conexao.php';
+
+
+        $query = $conector->prepare("UPDATE divisoes SET status='$status', divisao='$divisao' WHERE id='$id'");
+        
+        try{
+
+            $query -> execute();
+
+            print "<script>alert('Editado com sucesso')</script>";
+            print "<script>location=('divisoes')</script>";  
+        }
+        catch(PDOException $erro){
+            print 'erro '.$erro->getMessage();
+        }
+    }
+
+//CONTAGEM DE MEMBROS
+         public function contaMembros($id){
+     
+          include 'conexao.php';
+      
+          $query = $conector->prepare("SELECT id, status, divisao FROM usuarios WHERE status != '1' AND divisao=$id");
+     
+          try{
+              $query->execute();
+     
+              return $dados = $query->rowCount();       
+              
+          }
+          catch(PDOException $erro)
+          {
+          print 'erro '.$erro->getMessage();
+          }
+        }
+
+//SOCIAL RESPONSAVEL
+public function social($id){
+     
+    include 'conexao.php';
+
+    $query = $conector->prepare("SELECT id, status, divisao, path FROM usuarios WHERE status != '1' AND divisao=$id AND acesso='1'");
+
+    try{
+        $query->execute();
+
+        $dadosSocial = $query->fetch(PDO::FETCH_ASSOC);   
+        
+        return $dadosSocial['path'];    
+        
+    }
+    catch(PDOException $erro)
+    {
+    print 'erro '.$erro->getMessage();
+    }
+  }
+
+//LISTA DAS DIVISOES
     public function listaDivisoes()
     {
         include 'conexao.php';
@@ -48,9 +108,14 @@ class Divisoes
                 }
 
                 print_r('
+
                                         <tr class="tr-shadow">
 
-                                            <td>'.$dados -> data.'</td>
+                                            <td>'
+
+                                            .conversorDatas::dataBrasil($dados -> data).
+
+                                            '</td>
 
                                             <td>
                                                 <span class="'.$classe.'">'.$status.'</span>
@@ -58,21 +123,28 @@ class Divisoes
 
                                             <td class="desc">'.$dados -> divisao.'</td>
 
-                                            <td>'.$dados -> status.'</td>
+                                            <td>'
 
-                                            <td>'.$dados -> status.'</td>
+                                            .$this -> social($dados -> id).
+
+                                            '</td>
+
+                                            <td>'
+
+                                            .$this -> contaMembros($dados -> id).
+                                            
+                                            '</td>
 
                                             <td>
                                                 <div class="table-data-feature">
 
-                                <button id="botaoEditar" class="item" data-placement="top" title="Editar" data-toggle="modal" data-target="#formEditarDivisao" value="'.$dados -> id.'" onclick="edicao('.$dados -> id.')">
+                                <button id="botaoEditar" class="item" data-placement="top" title="Editar" data-toggle="modal" data-target="#formEditarDivisao" onclick=edicao("'.$dados -> status.'-'.$dados -> id.'-'.$dados -> divisao.'")>
                                     <i class="zmdi zmdi-edit"></i>
                                 </button>
 
-                                                    <button class="item" data-toggle="tooltip" data-placement="top"
-                                                        title="Deletar">
+                                <button class="item" data-toggle="modal" data-target="#formExcluirDivisao" data-placement="top" title="Excluir" name="botao" value="excluir" onclick=exclusao("'.$dados -> id.'-'.$dados -> divisao.'")>
                                                         <i class="zmdi zmdi-delete text-danger"></i>
-                                                    </button>
+                                </button>
 
                                                 </div>
                                             </td>
@@ -86,12 +158,31 @@ class Divisoes
         }
     }
 
-    //SELECT DAS DIVISOES
+//EXCLUIR DIVISÕES
+    public function excluir($id)
+    {
+        include 'conexao.php';
 
+
+        $query = $conector->prepare("DELETE FROM divisoes WHERE id='$id'");
+        
+        try{
+
+            $query -> execute();
+
+            print "<script>alert('Excluído com sucesso')</script>";
+            print "<script>location=('divisoes')</script>";  
+        }
+        catch(PDOException $erro){
+            print 'erro '.$erro->getMessage();
+        }
+    }
+
+//SELECT DAS DIVISOES
     public function selectDivisoes()
    
     {
-         require_once 'conexao.php';
+         include 'conexao.php';
  
          $query = $conector->prepare("SELECT * FROM divisoes WHERE status != '1' ORDER BY divisao ASC");
  
@@ -116,7 +207,7 @@ class Divisoes
          print 'erro '.$erro->getMessage();
          }
      }
- 
+
 } 
 
 ?>

@@ -2,6 +2,9 @@
 
 require 'classes/load.php';
 
+session_start();
+User::policia($_SESSION['email'], $_SESSION['senha']);
+
 /********************************************* FUNÇÕES PARA URL AMIGAVEL *********************/
 $inicio = 'dashboard';
 $atual		=		(isset($_GET['pg'])) ? $_GET['pg'] : $inicio;
@@ -11,7 +14,6 @@ $permissao	=		array(
     'dashboard',
     'divisoes',
     'usuarios',
-    'acoes',
     'meusDados',
     'sair'
 );
