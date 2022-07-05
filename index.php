@@ -1,9 +1,12 @@
 <?php
-
+error_reporting(0);
 require 'classes/load.php';
 
 session_start();
+$acao = new Acoes;
+
 User::policia($_SESSION['email'], $_SESSION['senha']);
+$dadosUsuarioLogado = User::usuarioLogado($_SESSION['usuario']);
 
 /********************************************* FUNÇÕES PARA URL AMIGAVEL *********************/
 $inicio = 'dashboard';
@@ -92,6 +95,9 @@ $id = 0;
                                     <i class="fa fa-sitemap" aria-hidden="true"></i>
                                     <span class="bot-line"></span>Divisões</a>
                             </li>
+<?php
+if($_SESSION['acesso'] == 0){
+?>
                             <li>
                                 <a href="<?= $caminho ?>/usuarios">
                                     <i class="fa fa-users" aria-hidden="true"></i>
@@ -112,34 +118,35 @@ $id = 0;
 
                                 </ul>
                             </li>
+                            <?php } ?>
                         </ul>
                     </div>
                     <div class="header__tool">
                         <div class="account-wrap">
                             <div class="account-item account-item--style2 clearfix js-item-menu">
                                 <div class="image">
-                                    <img src="<?= $caminho ?>/images/icon/user.png" alt="Guerra" />
+                                    <img src="<?= $caminho ?>/images/icon/insano.png" alt="<?= $dadosUsuarioLogado['path'] ?>" />
                                 </div>
                                 <div class="content">
-                                    <a class="js-acc-btn" href="#">Guerra</a>
+                                    <a class="js-acc-btn" href="#"><?= $dadosUsuarioLogado['path'] ?></a>
                                 </div>
                                 <div class="account-dropdown js-dropdown">
                                     <div class="info clearfix">
                                         <div class="image">
                                             <a href="#">
-                                                <img src="<?= $caminho ?>/images/icon/user.png" alt="Guerra" />
+                                                <img src="<?= $caminho ?>/images/icon/insano.png" alt="<?= $dadosUsuarioLogado['path'] ?>" />
                                             </a>
                                         </div>
                                         <div class="content">
                                             <h5 class="name">
-                                                <a href="#">Guerra</a>
+                                                <a href="#"><?= $dadosUsuarioLogado['path'] ?></a>
                                             </h5>
-                                            <span class="email">email@email.com</span>
+                                            <span class="email"><?= $dadosUsuarioLogado['email'] ?></span>
                                         </div>
                                     </div>
                                     <div class="account-dropdown__body">
                                         <div class="account-dropdown__item">
-                                            <a href="<?= $caminho ?>/meusDados">
+                                        <a href="<?=$caminho?>/meusDados">
                                                 <i class="zmdi zmdi-account"></i>Meus Dados</a>
                                         </div>
                                     </div>
@@ -162,7 +169,7 @@ $id = 0;
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="index.html">
-                            <img src="<?= $caminho ?>/images/icon/logo-white.png" alt="CoolAdmin" />
+                            <img src="<?= $caminho ?>/images/icon/logo-white.png" alt="Insanos" />
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -186,6 +193,9 @@ $id = 0;
                                 <i class="fa fa-sitemap" aria-hidden="true"></i>
                                 <span class="bot-line"></span>Divisões</a>
                         </li>
+                        <?php
+if($_SESSION['acesso'] == 0){
+?>
                         <li>
                             <a href="<?= $caminho ?>/usuarios">
                                 <i class="fa fa-users" aria-hidden="true"></i>
@@ -206,6 +216,7 @@ $id = 0;
 
                             </ul>
                         </li>
+                        <?php } ?>
                         </li>
                     </ul>
                 </div>
@@ -216,28 +227,28 @@ $id = 0;
                 <div class="account-wrap">
                     <div class="account-item account-item--style2 clearfix js-item-menu">
                         <div class="image">
-                            <img src="<?= $caminho ?>/images/icon/user.png" alt="Guerra" />
+                            <img src="<?= $caminho ?>/images/icon/insano.png" alt="<?= $dadosUsuarioLogado['path'] ?>" />
                         </div>
                         <div class="content">
-                            <a class="js-acc-btn" href="#">Guerra</a>
+                            <a class="js-acc-btn" href="#"><?= $dadosUsuarioLogado['path'] ?></a>
                         </div>
                         <div class="account-dropdown js-dropdown">
                             <div class="info clearfix">
                                 <div class="image">
                                     <a href="#">
-                                        <img src="<?= $caminho ?>/images/icon/user.png" alt="Guerra" />
+                                        <img src="<?= $caminho ?>/images/icon/insano.png" alt="<?= $dadosUsuarioLogado['path'] ?>" />
                                     </a>
                                 </div>
                                 <div class="content">
                                     <h5 class="name">
-                                        <a href="#">Guerra</a>
+                                        <a href="#"><?= $dadosUsuarioLogado['path'] ?></a>
                                     </h5>
-                                    <span class="email">email@email.com</span>
+                                    <span class="email"><?= $dadosUsuarioLogado['email'] ?></span>
                                 </div>
                             </div>
                             <div class="account-dropdown__body">
                                 <div class="account-dropdown__item">
-                                    <a href="<?= $caminho ?>/meusDados">
+                                    <a href="<?=$caminho?>/meusDados">
                                         <i class="zmdi zmdi-account"></i>Meus Dados</a>
                                 </div>
                             </div>
@@ -256,10 +267,10 @@ $id = 0;
         <div class="page-content--bgf7">
 
             <!-- APRESENTAÇÃO-->
-            <section class="welcome p-t-10">
+            <section class="welcome p-t-10" >
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 mt-3">
                             <h3 class="title-4 text-center title--sbold">Sistema de Gestão Social Insanos MC
                             </h3>
                             <hr class="line-seprate">
@@ -320,6 +331,105 @@ $id = 0;
     <!-- Main JS-->
     <script src="<?= $caminho ?>/js/main.js"></script>
 
+    <script>
+        (function ($) {
+  // USE STRICT
+  "use strict";
+
+  try {
+    //bar chart
+    var ctx = document.getElementById("barChart");
+    if (ctx) {
+      //ctx.height = 200;
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        defaultFontFamily: 'Poppins',
+        data: {
+          labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+          datasets: [
+            {
+              label: "Ações Realizadas",
+              data:
+                [
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-1-1'))?>, 
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-2-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-3-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-4-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-5-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-6-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-7-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-8-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-9-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-10-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-11-1'))?>,
+                    <?php $acao -> acoesGrafico($dadosUsuarioLogado['divisao'], date('Y-12-1'))?>
+                ],
+              borderColor: "rgba(0, 123, 255, 0.9)",
+              borderWidth: "0",
+              backgroundColor: "rgba(0, 123, 255, 0.5)",
+              fontFamily: "Poppins"
+            },
+            {
+              label: "Integrantes Presentes",
+              data:
+                [
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-1-1'))?>,
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-2-1'))?>, 
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-3-1'))?>, 
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-4-1'))?>, 
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-5-1'))?>, 
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-6-1'))?>, 
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-7-1'))?>,
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-8-1'))?>,
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-9-1'))?>,
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-10-1'))?>,
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-11-1'))?>,
+                    <?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-12-1'))?>
+
+                ],
+              borderColor: "rgba(0,0,0,0.09)",
+              borderWidth: "0",
+              backgroundColor: "rgba(0,0,0,0.07)",
+              fontFamily: "Poppins"
+            }
+          ]
+        },
+        options: {
+          legend: {
+            position: 'top',
+            labels: {
+              fontFamily: 'Poppins'
+            }
+
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                fontFamily: "Poppins"
+
+              }
+            }],
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                fontFamily: "Poppins",
+                stepSize: 1
+              }
+            }]
+          }
+        }
+      });
+    }
+
+
+  } catch (error) {
+    console.log(error);
+  }
+
+})(jQuery);
+
+    </script>
+<?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-4-1'))?>
 </body>
 
 </html>

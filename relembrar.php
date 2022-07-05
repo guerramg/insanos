@@ -1,64 +1,10 @@
 <?php
 
-$erro = addslashes($_GET['erro']);
+include 'classes/userLoginClass.php';
 
-switch ($erro){
-	case 0;
-	$mensagem = '
-	<div class="alert alert-warning text-center" role="alert" id="mensagem">
-	Usuário não autenticado!
-	</div>
-	';
-	break;
-
-	case 1;
-	$mensagem = '
-	<div class="alert alert-warning text-center" role="alert" id="mensagem">
-	Email incorreto ou inexistente!
-	</div>
-	';
-	break;
-
-	case 2;
-	$mensagem = '
-	<div class="alert alert-warning text-center" role="alert" id="mensagem">
-	Senha incorreta!
-	</div>
-	';
-	break;
-
-	case 3;
-	$mensagem = '
-	<div class="alert alert-warning text-center" role="alert" id="mensagem">
-	Logout efetuado com sucesso!
-	</div>
-	';
-	break;
-
-	//ERROS GERAR SENHA
-
-	case 10;
-	$mensagem = '
-	<div class="alert alert-warning text-center" role="alert" id="mensagem">
-	Este email não está cadastrado no sistema. Impossível gerar nova senha!
-	</div>
-	';
-	break;
-
-	//NOVA SENHA GERADA COM SUCESSO
-	case 11;
-	$mensagem = '
-	<div class="alert alert-warning text-center" role="alert" id="mensagem">
-	Sua nova senha foi gerada e enviada para seu email!
-	</div>
-	';
-	break;
-	
-	default;
-	$mensagem = '';
-	break;
+if($_POST['botao'] == 'Gerar'){
+    User::novaSenha($_POST['email']);
 }
-
 ?>
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -69,7 +15,7 @@ switch ($erro){
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Entre com seus dados de acesso!</title>
+	<title>Gerar nova senha...</title>
    <!--Made with love by Mutiullah Samim -->
    
 	<!--Bootsrap 4 CDN-->
@@ -81,34 +27,13 @@ switch ($erro){
 	<!--Custom styles-->
 	<link rel="stylesheet" type="text/css" href="css/login.css">
 
-	<style>
-	@keyframes auto {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-	.sumir{
-
-    animation: auto 3s;
-
-}
-
-.sumirGeral{
-	display: none;
-}
-
-	</style>
-
 </head>
 <body>
 <div class="container">
 	<div class="d-flex justify-content-center h-100">
 		<div class="card">
 			<div class="card-header">
-				<h3 class="mt-3">Gestão Social</h3>
+				<h3 class="mt-3">Entre com seu email</h3>
 				<div class="d-flex justify-content-end social_icon">
 					<span><a href="https://dev.guerra.app.br" target="_blank"><i class="fab fa-dev"></i></a></span>
 					<span><a href="https://github.com/guerramg/insanos" target="_blank"><i class="fab fa-git-square"></i></a></span>
@@ -116,7 +41,7 @@ switch ($erro){
 				</div>
 			</div>
 			<div class="card-body">
-				<form action="valida.php" method="POST">
+				<form action="" method="POST">
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-at"></i></span>
@@ -124,24 +49,11 @@ switch ($erro){
 						<input type="email" name="email" class="form-control" placeholder="email" required>
 						
 					</div>
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-key"></i></span>
-						</div>
-						<input type="password" name="senha" class="form-control" placeholder="senha" required>
-					</div>
 					<div class="form-group">
-						<input type="submit" value="Login" class="btn float-right login_btn">
+						<input type="submit" value="Gerar" name="botao" class="btn float-right login_btn">
 					</div>
 				</form>
 			</div>
-			<div class="card-footer">
-				<div class="d-flex justify-content-center">
-					<a href="relembrar.php">Esqueceu sua senha?</a>
-				</div>
-			</div>
-
-			<?= $mensagem ?>
 		</div>
 
 	</div>

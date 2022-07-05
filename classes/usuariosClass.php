@@ -38,7 +38,7 @@ class Usuarios extends conversorDatas{
     {
         include 'conexao.php';    
 
-        $query = $conector->prepare("SELECT data, status, divisao, path, email, grau FROM usuarios ORDER BY path, status ASC");
+        $query = $conector->prepare("SELECT * FROM usuarios ORDER BY path, status ASC");
 
         try{
 
@@ -52,6 +52,7 @@ class Usuarios extends conversorDatas{
                 $queryDivisao = $conector -> prepare("SELECT id, divisao FROM divisoes WHERE id='$divisao'");
                 $queryDivisao -> execute();
                 $dadosDivisao = $queryDivisao -> fetch(PDO::FETCH_OBJ); 
+
 
                 if($dados -> status == 0){
                     $status = 'Ativo';
@@ -91,6 +92,18 @@ class Usuarios extends conversorDatas{
 
                 }
 
+                switch ($dados -> acesso){
+                    case 0;
+                    $acesso = 'ADM';
+                    break;
+                    case 1;
+                    $acesso = 'Social';
+                    break;
+                    case 2;
+                    $acesso = 'Integrante';
+                    break;
+                }
+
                 //$conversorData = new conversorDatas;
 
                 print_r('
@@ -113,14 +126,13 @@ class Usuarios extends conversorDatas{
                                             <td>
                                                 <div class="table-data-feature">
 
-                                <button id="botaoEditar" class="item" data-placement="top" title="Editar" data-toggle="modal" data-target="#formEditarDivisao" value="">
+                                <button id="botaoEditar" class="item" data-placement="top" title="Editar" data-toggle="modal" data-target="#formEditarUsuarios" onclick="edicao(`'.$dados -> status.'-'.$dados -> id.'-'.$dados -> path.'-'.$grau.'-'.$acesso.'-'.$dados -> email.'-'.$dadosDivisao -> divisao.'`)">
                                     <i class="zmdi zmdi-edit"></i>
                                 </button>
 
-                                                    <button class="item" data-toggle="tooltip" data-placement="top"
-                                                        title="Deletar">
-                                                        <i class="zmdi zmdi-delete text-danger"></i>
-                                                    </button>
+                                <button class="item" data-placement="top" title="Deletar" data-toggle="modal" data-target="#formExcluirUsuarios" onclick="exclusao(`'.$dados -> id.'-'.$dados -> path.'`)">
+                                    <i class="zmdi zmdi-delete text-danger"></i>
+                                </button>
 
                                                 </div>
                                             </td>
@@ -135,18 +147,64 @@ class Usuarios extends conversorDatas{
     }
 
     // EDITAR DADOS DOS USUARIOS
+    public function editar($acesso, $path , $email, $grau, $id, $status){
+        
+        include 'conexao.php';
 
-    // EXCLUIR DADOS DOS USUARIOS
+        // TESTES
+        if($grau == ''){
+            $paramGrau = '';
+        }else{
+            $paramGrau = ", grau = '$grau'";
+        }
 
-    //SELECT DE USUARIOS
-    /*public function selectDivisoes()
-   
-   {
-        require_once 'conexao.php';
-
-        $query = $conector->prepare("SELECT * FROM divisoes WHERE status != '1' ORDER BY divisao ASC");
+        if($acesso == ''){
+            $paramAcesso = '';
+        }else{
+            $paramAcesso = "acesso = '$acesso',";
+        }
 
         try{
+            $queryUsuario = $conector -> prepare("UPDATE usuarios SET $paramAcesso status='$status', path='$path', email='$email' $paramGrau WHERE id='$id'");
+            $queryUsuario -> execute();
+
+            print "<script>alert('Atualizado com sucesso')</script>";
+            print "<script>location=('usuarios')</script>";  
+
+
+        }catch(PDOException $erro){
+            print 'Error: '.$erro -> getMessage();
+        }
+    }
+
+//EXCLUIR USUARIO
+public function excluir($id)
+{
+    include 'conexao.php';
+
+
+    $query = $conector->prepare("DELETE FROM usuarios WHERE id='$id'");
+    
+    try{
+
+        $query -> execute();
+
+        print "<script>alert('Excluído com sucesso')</script>";
+        print "<script>location=('usuarios')</script>";  
+    }
+    catch(PDOException $erro){
+        print 'erro '.$erro->getMessage();
+    }
+}
+
+    //SELECT DE USUARIOS
+    public function selectUsuarios($divisao)
+   
+   {
+    include 'conexao.php';
+
+        try{
+            $query = $conector->prepare("SELECT * FROM usuarios WHERE status != '1' AND divisao='$divisao' ORDER BY path ASC");
             $query->execute();
 
             while($dados = $query->fetch(PDO::FETCH_OBJ))
@@ -156,7 +214,7 @@ class Usuarios extends conversorDatas{
                 print_r('
                         <option value="'.$dados->id.'">
 
-                        '.$dados->divisao.'
+                        '.$dados->path.'
 
                         </option>
                     ');
@@ -166,7 +224,7 @@ class Usuarios extends conversorDatas{
         {
         print 'erro '.$erro->getMessage();
         }
-    }*/
+    }
 }
 
 ?>

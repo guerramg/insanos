@@ -1,24 +1,24 @@
 <?php
 
+
 class Divisoes
 {
 //INSERIR DIVISAO
-    public function inserir($arrayDivisao)
+    public function inserir($divisao)
     {
         include 'conexao.php';
 
+        if($divisao == 'Regional'){
+            $idCampo = 'id,';
+            $idValue = '1,';
+        }
 
-        $query = $conector->prepare("INSERT INTO divisoes (data, status, divisao) VALUES (now(), :status, :divisao )");
+        $query = $conector->prepare("INSERT INTO divisoes ($idCampo data, status, divisao) VALUES ($idValue now(), '0', '$divisao')");
         
         try{
-            for($d=0; $d <= count($arrayDivisao); $d ++){
-
-            $query->bindValue(':status', '0');
-            $query->bindValue(':divisao', $arrayDivisao[$d]);
 
             $query -> execute();
 
-            }
             print "<script>alert('inserido com sucesso')</script>";
             print "<script>location=('divisoes')</script>";  
         }
@@ -91,7 +91,7 @@ public function social($id){
     public function listaDivisoes()
     {
         include 'conexao.php';
-
+        
         $query = $conector->prepare("SELECT * FROM divisoes ORDER BY divisao ASC");
 
         try{
@@ -106,6 +106,24 @@ public function social($id){
                     $status = 'Inativa';
                     $classe = 'status--denied';
                 }
+
+                //VER SE É REGIONAL
+                
+
+if($_SESSION['acesso'] == 0){
+    $botoes = '
+    <button id="botaoEditar" class="item" data-placement="top" title="Editar" data-toggle="modal" data-target="#formEditarDivisao" onclick="edicao(`'.$dados -> status.'-'.$dados -> id.'-'.$dados -> divisao.'`)">
+        <i class="zmdi zmdi-edit"></i>
+    </button>
+
+    <button class="item" data-toggle="modal" data-target="#formExcluirDivisao" data-placement="top" title="Excluir" name="botao" value="excluir" onclick="exclusao(`'.$dados -> id.'-'.$dados -> divisao.'`)">
+                            <i class="zmdi zmdi-delete text-danger"></i>
+    </button>';
+}
+else{
+    $botoes = '';
+}
+
 
                 print_r('
 
@@ -138,13 +156,7 @@ public function social($id){
                                             <td>
                                                 <div class="table-data-feature">
 
-                                <button id="botaoEditar" class="item" data-placement="top" title="Editar" data-toggle="modal" data-target="#formEditarDivisao" onclick=edicao("'.$dados -> status.'-'.$dados -> id.'-'.$dados -> divisao.'")>
-                                    <i class="zmdi zmdi-edit"></i>
-                                </button>
-
-                                <button class="item" data-toggle="modal" data-target="#formExcluirDivisao" data-placement="top" title="Excluir" name="botao" value="excluir" onclick=exclusao("'.$dados -> id.'-'.$dados -> divisao.'")>
-                                                        <i class="zmdi zmdi-delete text-danger"></i>
-                                </button>
+                                                '.$botoes.'
 
                                                 </div>
                                             </td>

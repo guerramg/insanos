@@ -2,8 +2,7 @@
         $divisoes = new Divisoes;
 
     if($_POST['botao'] == 'incluir'){
-        $arrayDivisao = array($_POST["divisao"]);
-        $divisoes -> inserir($arrayDivisao);
+        $divisoes -> inserir($_POST["divisao"]);
     }
 
     if($_POST['botao'] == 'editar'){
@@ -156,14 +155,16 @@
 
                     </div>
                     <div class="table-data__tool-right">
-
+                    <?php
+if($_SESSION['acesso'] == 0){
+?>
 
                         <button class="au-btn au-btn-icon au-btn--green au-btn--small" data-toggle="modal"
                             data-target="#formDivisao">
                             <i class="zmdi zmdi-plus"></i>
                             Incluir divisão
                         </button>
-
+<?php } ?>
 
                     </div>
                 </div>
