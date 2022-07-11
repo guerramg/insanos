@@ -4,6 +4,7 @@ require 'classes/load.php';
 
 session_start();
 $acao = new Acoes;
+$divisao = new Divisoes;
 
 User::policia($_SESSION['email'], $_SESSION['senha']);
 $dadosUsuarioLogado = User::usuarioLogado($_SESSION['usuario']);
@@ -273,6 +274,14 @@ if($_SESSION['acesso'] == 0){
                         <div class="col-md-12 mt-3">
                             <h3 class="title-4 text-center title--sbold">Sistema de Gestão Social Insanos MC
                             </h3>
+                            <h5 class="text-center">Divisão
+                                 <?php
+
+                                    $dadosDivisao = $divisao -> dadosDivisao($dadosUsuarioLogado['divisao']);
+                                    print $dadosDivisao['divisao'];
+
+                                  ?>
+                            </h5>
                             <hr class="line-seprate">
                         </div>
                     </div>
@@ -290,7 +299,6 @@ if($_SESSION['acesso'] == 0){
             <!-- FIM CONTEÚDO -->
 
             </div>
-
             <!-- COPYRIGHT-->
             <section>
                 <div class="container">
@@ -429,7 +437,7 @@ if($_SESSION['acesso'] == 0){
 })(jQuery);
 
     </script>
-<?php $acao -> integrantesGrafico($dadosUsuarioLogado['divisao'], date('Y-4-1'))?>
+
 </body>
 
 </html>

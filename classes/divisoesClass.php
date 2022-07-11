@@ -220,6 +220,22 @@ else{
          }
      }
 
+     //DADOS DA DIVISAO
+     public function dadosDivisao($id){
+
+        include 'conexao.php';
+
+        try{
+            $queryDivisao = $conector -> prepare("SELECT id, divisao FROM divisoes WHERE id='$id'");
+            $queryDivisao -> execute();
+            $dadosDivisao = $queryDivisao -> fetch(PDO::FETCH_ASSOC);
+            return $dadosDivisao;
+
+        }catch(PDOException $erro){
+            print 'Erro: '.$erro->getMessage();
+        }
+     }
+
 } 
 
 ?>

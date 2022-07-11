@@ -352,27 +352,13 @@ public function listaAcoes($divisao)
      
                 include 'conexao.php';
     
-                $queryRanking = $conector -> prepare("SELECT * FROM acoes WHERE divisao='$divisao' AND MONTH(realizada) = MONTH('$mes') AND YEAR(realizada) = YEAR(CURRENT_DATE())");
+                $queryRanking = $conector -> prepare("SELECT p.usuario, a.id FROM participantes p INNER JOIN acoes a ON a.id = p.acao WHERE a.divisao='$divisao' AND MONTH(a.realizada) = MONTH('$mes') AND YEAR(a.realizada) = YEAR(CURRENT_DATE())");
 
-
-       
                 try{
     
                     $queryRanking->execute();
-    
-                    while($dadosRanking = $queryRanking -> fetch(PDO::FETCH_ASSOC)){
-    
-                        $queryParticipantes = $conector->prepare("SELECT id FROM participantes WHERE acao = '$dadosRanking[id]'");
-    
-                        $queryParticipantes -> execute();
-
-                        $total = $queryParticipantes -> rowCount();
-
-                        $total = $total + $total;
-
-                        }
-
-                    print_r($total);
+                    
+                    print_r ($queryRanking -> rowCount());
     
                 }
                 catch(PDOException $erro)
