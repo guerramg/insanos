@@ -31,7 +31,17 @@ class User{
                 $_SESSION['email'] = $dadosEmail['email'];
                 $_SESSION['senha'] = $dadosEmail['senha'];
 
+                /********** VEJO SE É ADM **********/
+
+                if($dadosEmail['divisao'] == 1){
+
+                    header('Location: adm');
+
+                }else{
+
                 header('Location: dashboard');
+
+                }
 
             }
 

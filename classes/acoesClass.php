@@ -1,7 +1,7 @@
 <?php
 
 
-    class Acoes{
+    class Acoes extends conversorDatas{
 
         // INSERIR AÇÕES
         public function inserir($divisao, $data, $acao, $responsavel){
@@ -208,8 +208,17 @@ public function listaAcoes($divisao)
                 $funcao = 'YEAR';
                 break;
             }
+
+            //REGIONAL
+
+            if($divisao == 1){
+                $complementoSql = "";
+            }
+            else{
+                $complementoSql = "divisao = '$divisao' AND";
+            }
         
-            $query = $conector->prepare("SELECT * FROM acoes WHERE divisao = '$divisao' AND $funcao(realizada) = '$periodo'");
+            $query = $conector->prepare("SELECT * FROM acoes WHERE $complementoSql $funcao(realizada) = '$periodo'");
        
             try{
                 $query->execute();
@@ -228,7 +237,16 @@ public function listaAcoes($divisao)
      
             include 'conexao.php';
 
-            $queryAcao = $conector -> prepare("SELECT id, realizada, divisao FROM acoes WHERE divisao = '$divisao' AND YEAR(realizada) = YEAR(CURRENT_DATE())"); //TOTAL DE AÇÕES
+            //REGIONAL
+
+            if($divisao == 1){
+                $complementoSql = "";
+            }
+            else{
+                $complementoSql = "divisao = '$divisao' AND";
+            }
+
+            $queryAcao = $conector -> prepare("SELECT id, realizada, divisao FROM acoes WHERE  $complementoSql  YEAR(realizada) = YEAR(CURRENT_DATE())"); //TOTAL DE AÇÕES
        
             try{
 
@@ -257,9 +275,18 @@ public function listaAcoes($divisao)
      
             include 'conexao.php';
 
+            //REGIONAL
+
+            if($divisao == 1){
+                $complementoSql = "";
+            }
+            else{
+                $complementoSql = "u.divisao = '$divisao' AND";
+            }
+
             $queryAtencao = $conector -> prepare("
 
-            SELECT COUNT(u.id) AS 'atencao' FROM usuarios u, acoes a WHERE u.divisao = '$divisao' AND YEAR(a.realizada) = YEAR(CURRENT_DATE()) AND u.id NOT IN (SELECT p.usuario FROM participantes p) GROUP BY u.path;
+            SELECT COUNT(u.id) AS 'atencao' FROM usuarios u, acoes a WHERE $complementoSql YEAR(a.realizada) = YEAR(CURRENT_DATE()) AND u.id NOT IN (SELECT p.usuario FROM participantes p) GROUP BY u.path;
 
             ");
        
@@ -365,6 +392,107 @@ public function listaAcoes($divisao)
                 {
                 print 'Erro: '.$erro->getMessage();
                 }
+              }
+
+
+              /* METODOS ADM */
+
+              //AÇÕES
+
+              public function acoesAdm($mes){
+
+                include 'conexao.php';
+
+                        $queryAcoes = $conector -> prepare("SELECT * FROM acoes  WHERE MONTH(realizada) = MONTH('$mes') AND YEAR(realizada) = YEAR(CURRENT_DATE()) ORDER BY realizada DESC");
+
+                try{
+
+                    $queryAcoes -> execute();
+                    $totalAções = $queryAcoes -> rowCount();
+
+                    while($dadosAcoes = $queryAcoes -> fetch(PDO::FETCH_OBJ)){
+
+                        $divisao = $dadosAcoes -> divisao;
+                        $acao = $dadosAcoes -> id;
+
+                        $queryDivisao = $conector -> prepare("SELECT id, divisao FROM divisoes WHERE id='$divisao'");
+                        $queryDivisao -> execute();
+                        $dadosDivisao = $queryDivisao -> fetch(PDO::FETCH_OBJ);
+
+                        $queryParticipantes = $conector -> prepare("SELECT acao, usuario FROM participantes WHERE acao='$acao'");
+                        $queryParticipantes -> execute();
+                        $totalParticipantes = $queryParticipantes -> rowCount();
+                        
+                        $queryHistorico = $conector -> prepare("SELECT acao, dados FROM historico WHERE acao='$acao'");
+                        $queryHistorico -> execute();
+                        $dadosHistorico = $queryHistorico -> fetch(PDO::FETCH_OBJ);
+
+                        print_r('
+                        <tr>
+                        <td>
+                            <div class="table-data__info">
+                                    <h6>'.conversorDatas::dataBrasil($dadosAcoes -> realizada).'</h6>
+                                </div>
+                            </td>
+
+                            <td>
+                            <div class="table-data__info">
+                                    <h6>'.$dadosAcoes -> acao.'</h6>
+                                </div>
+                            </td>
+                            <td>
+                                    <h6>'.$dadosDivisao -> divisao.'</h6>
+                                
+                            </td>
+
+                            <td>
+                                <a href="#" data-toggle="modal" data-target="#formIntegrantes" data-placement="top" onclick="verParticipantes('.$dadosAcoes -> id.')">
+                                <span class="role member">'.$totalParticipantes.'</span>
+                                </a>
+                            </td>
+
+                            <td>
+                                <span class="more">
+                                    <i class="zmdi zmdi-more" data-toggle="modal" data-target="#formHistorico" data-placement="top" onclick="verHistorico(`'.$dadosHistorico -> dados.'`)"></i>
+                                </span>
+                            </td>
+                        </tr>
+                        ');
+
+                    }
+                }catch(PDOException $erro){
+                    print $erro->getMessage();
+                }
+
+              }
+
+              //INTEGRANTES EM ATENÇÃO
+
+              public function atencaoAdm(){
+                include 'conexao.php';
+
+                $queryAtencao = $conector -> prepare("SELECT u.id, u.path, u.divisao, d.divisao FROM usuarios u, acoes a, divisoes d WHERE u.divisao = d.id AND YEAR(a.realizada) = YEAR(CURRENT_DATE()) AND u.id NOT IN (SELECT p.usuario FROM participantes p) GROUP BY u.path ORDER BY d.divisao ASC");
+
+                try{
+                    $queryAtencao -> execute();
+                    while($dadosAtencao = $queryAtencao -> fetch(PDO::FETCH_ASSOC)){
+                        print_r('<tr>
+                        <td>
+                                    <h6>'.$dadosAtencao["divisao"].'</h6>
+                            </td>
+
+                            <td>
+                            <div class="table-data__info">
+                                    <h6>'.$dadosAtencao["path"].'</h6>
+                                </div>
+                            </td>
+                        </tr>');
+                    }
+
+                }catch(PDOException $erro){
+                    print $erro->getMessage();
+                }
+
               }
 
 

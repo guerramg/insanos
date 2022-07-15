@@ -16,6 +16,7 @@ $pasta		=		'modulos';
 $permissao	=		array(
     '404',
     'dashboard',
+    'adm',
     'divisoes',
     'usuarios',
     'meusDados',
@@ -86,7 +87,14 @@ $id = 0;
                     <div class="header__navbar" style="margin-top: 4rem;">
                         <ul class="list-unstyled">
                             <li>
-                                <a href="<?= $caminho ?>/dashboard">
+                                <a href="<?= $caminho ?>/<?php
+                                if($dadosUsuarioLogado['divisao'] == 1){
+                                    print 'adm';
+                                }else{
+                                    print 'dashboard';
+                                }
+                                ?>
+                                ">
                                     <i class="fas fa-tachometer-alt"></i>
                                     <span class="bot-line"></span>Dashboard</a>
                             </li>
